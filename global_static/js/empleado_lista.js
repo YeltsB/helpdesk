@@ -1,24 +1,30 @@
-var tablaCliente;
+var tablaEmpleado;
 var modalTitulo;
 var token;
 function obtenerDatos(){
     token = $('input[name="csrfmiddlewaretoken"]').val();
-    tablaCliente = $('#datatable').DataTable({
+    tablaEmpleado = $('#datatable').DataTable({
         responsive: true,
         autoWidth: false,
         destroy: true,
+        bSortable: true,
         deferRender: true,
         ajax: {
             url: window.location.pathname,//Obtenemos la url obsoluta
             type: 'POST',
             data: {
                 'action': 'buscardatos', //Mandamos la accion para que django sepa que tiene que buscar
-                'csrfmiddlewaretoken': token,
+                'csrfmiddlewaretoken': token
             }, // parametros
             dataSrc: ""
         },
         columns: [ //Columnas de nuestro modelo/Tabla aqui retorna o pinta los valores en la datables
-            { "data": "id"},  //0
+            {   'className':      'details-control',
+                'orderable':      false,
+                'data':           null,
+                'defaultContent': '<i class="fas fa-plus-circle"></i>'
+            },//0
+            { "data": "id"},  
             { "data": "nombres"}, 
             { "data": "apellidos"}, 
             { "data": "dni"}, 
@@ -29,7 +35,7 @@ function obtenerDatos(){
         ],
         columnDefs: [ //Personalizar una columna
             {
-                targets: [7], //Personalizar la colummna numero 3
+                targets: [8], //Personalizar la colummna numero 3
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -55,7 +61,7 @@ $(function () {
         $(this).find('[autofocus]').focus();//Focus para el primer input en la modal
     });
     $('.btnRefrescar').on('click', function () {
-        tablaCliente.ajax.reload(); //Accion de actualizar registros
+        tablaEmpleado.ajax.reload(); //Accion de actualizar registros
         alerta('Registros actualizados');
     });
 
@@ -71,8 +77,8 @@ $(function () {
     $('#datatable tbody').on('click', 'a[rel="editar"]', function () {
             modalTitulo.find('span').html('Edición de Empleado');
             modalTitulo.find('i').removeClass().addClass('fas fa-edit');
-            var tr = tablaCliente.cell($(this).closest('td, li')).index();
-            var data = tablaCliente.row(tr.row).data();
+            var tr = tablaEmpleado.cell($(this).closest('td, li')).index();
+            var data = tablaEmpleado.row(tr.row).data();
             $('form')[0].reset();
             $('input[name="action"]').val('editar');
             $('input[name="id"]').val(data.id);
@@ -86,8 +92,8 @@ $(function () {
             $('#modalEmpleado').modal('show');
             
         }).on('click', 'a[rel="eliminar"]', function () {
-            var tr = tablaCliente.cell($(this).closest('td, li')).index();
-            var data = tablaCliente.row(tr.row).data();
+            var tr = tablaEmpleado.cell($(this).closest('td, li')).index();
+            var data = tablaEmpleado.row(tr.row).data();
             var parametros = new FormData();
             parametros.append('action', 'eliminar');
             parametros.append('id', data.id);
@@ -95,7 +101,7 @@ $(function () {
             parametros.append('csrfmiddlewaretoken',token);
         
             submit_con_ajax(window.location.pathname,`¿Está seguro de eliminar el registro Nro ${data.id}?`,parametros, function () {
-                tablaCliente.ajax.reload();
+                tablaEmpleado.ajax.reload();
                 alerta('Registro eliminado');
             });
         });
@@ -108,8 +114,8 @@ $(function () {
         submit_con_ajax(window.location.pathname,'¿Está seguro de realizar la siguiente acción?',parametros, function () {
             $('#modalEmpleado').modal('hide');
             $('form')[0].reset();
-            tablaCliente.ajax.reload();
-            console.log(parametros.get('csrfmiddlewaretoken'));
+            tablaEmpleado.ajax.reload();
+
             if(parametros.get('action') == 'crear'){
                 alerta('Registro creado');
             }else{
@@ -117,6 +123,10 @@ $(function () {
             }
         });
     });
+ 
+   
+    
+
 });
 
 function alerta(contenido){

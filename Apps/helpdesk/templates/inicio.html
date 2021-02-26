@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-<!-- functions -->
-<script src="{% static 'js/empleado_lista.js' %}"></script>
 <!-- Datatable css-->
 <link rel="stylesheet" href="{% static 'datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
 <link rel="stylesheet" href="{% static 'datatables-1.10.20/js/jquery.dataTables.js' %}">
@@ -11,13 +9,15 @@
 <script src="{% static 'datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
 <script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
 <script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+<!-- functions -->
+<script src="{% static 'js/empleado_lista.js' %}"></script>
 {% endblock head %}
 {% block content %}
     <div class="card card-default">
         <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-search"></i>
-            {{ title }}
+            {{ entidad }}
         </h3>
         </div>
         <!-- /.card-header -->
@@ -25,6 +25,7 @@
             <table class="table" id='datatable'>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Nro</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>

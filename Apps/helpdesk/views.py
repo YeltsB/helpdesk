@@ -42,4 +42,4 @@ def inicio (request):
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
     elif request.method == 'GET':
-        return render(request, 'inicio.html',{'titulo':'Inicio'})
+        return render(request, 'inicio.html',{'titulo':'Inicio','entidad':'Lista de Empleados'})
