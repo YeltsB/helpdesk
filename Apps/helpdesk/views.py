@@ -2,7 +2,7 @@ from Apps.helpdesk.lib import *
 
 # Create your views here.
 
-@method_decorator(csrf_exempt)
+
 def inicio (request):
     if request.method == 'POST':
         data = []

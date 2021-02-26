@@ -1,8 +1,8 @@
 var tablaCliente;
 var modalTitulo;
-
+var token;
 function obtenerDatos(){
-
+    token = $('input[name="csrfmiddlewaretoken"]').val();
     tablaCliente = $('#datatable').DataTable({
         responsive: true,
         autoWidth: false,
@@ -12,7 +12,8 @@ function obtenerDatos(){
             url: window.location.pathname,//Obtenemos la url obsoluta
             type: 'POST',
             data: {
-                'action': 'buscardatos' //Mandamos la accion para que django sepa que tiene que buscar
+                'action': 'buscardatos', //Mandamos la accion para que django sepa que tiene que buscar
+                'csrfmiddlewaretoken': token,
             }, // parametros
             dataSrc: ""
         },
@@ -90,6 +91,9 @@ $(function () {
             var parametros = new FormData();
             parametros.append('action', 'eliminar');
             parametros.append('id', data.id);
+            token = $('input[name="csrfmiddlewaretoken"]').val();
+            parametros.append('csrfmiddlewaretoken',token);
+        
             submit_con_ajax(window.location.pathname,`¿Está seguro de eliminar el registro Nro ${data.id}?`,parametros, function () {
                 tablaCliente.ajax.reload();
                 alerta('Registro eliminado');
@@ -105,7 +109,7 @@ $(function () {
             $('#modalEmpleado').modal('hide');
             $('form')[0].reset();
             tablaCliente.ajax.reload();
-
+            console.log(parametros.get('csrfmiddlewaretoken'));
             if(parametros.get('action') == 'crear'){
                 alerta('Registro creado');
             }else{
