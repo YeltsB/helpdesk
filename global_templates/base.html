@@ -33,9 +33,8 @@
   <script src="{% static 'AdminLTE-3.1.0/dist/js/adminlte.js' %}"></script>
   <!-- sweetalert2 -->
   <script src="{% static 'sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
-    <!-- functions -->
-  <script src="{% static 'js/functions.js' %}"></script>
 
+  {% block head %}{% endblock head %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
