@@ -46,78 +46,132 @@ function obtenerDatos(){
     });
 }
 
-$(function () {
+$(function () {    
     obtenerDatos();
     modalTitulo = $('.modal-title');
-
+    
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();//Focus para el primer input en la modal
     });
     $('.btnRefrescar').on('click', function () {
         tablaCliente.ajax.reload(); //Accion de actualizar registros
+        alerta('Registros actualizados');
     });
 
-    $('.btnAdd').on('click', function () {
+    $('.btnAdd').on('click', function () { //Creacion de un registro
         $('input[name="action"]').val('crear');
         modalTitulo.find('span').html('Creación de Empleado');
-        console.log(modalTitulo.find('i'));
         modalTitulo.find('i').removeClass().addClass('fas fa-plus');
         $('form')[0].reset();
         $('#modalEmpleado').modal('show');
     });
 
-    //Botones en la colummna opcción 
+    //Botones en la colummna opcción editar/eliminar
     $('#datatable tbody').on('click', 'a[rel="editar"]', function () {
             modalTitulo.find('span').html('Edición de Empleado');
             modalTitulo.find('i').removeClass().addClass('fas fa-edit');
             var tr = tablaCliente.cell($(this).closest('td, li')).index();
             var data = tablaCliente.row(tr.row).data();
-            $('input[name="action"]').val('edit');
+            $('form')[0].reset();
+            $('input[name="action"]').val('editar');
+            $('input[name="id"]').val(data.id);
+            $('input[name="nombres"]').val(data.nombres);
+            $('input[name="apellidos"]').val(data.apellidos);
+            $('input[name="identidad"]').val(data.dni);
+            $('input[name="fecha_nacimiento"]').val(data.fecha_nacimiento);
+            if(data.direccion != 'No Registrado')
+                $('textarea[name="direccion"]').val(data.direccion);
+            $('select[name="genero"]').val(data.genero.id);
             $('#modalEmpleado').modal('show');
             
         }).on('click', 'a[rel="eliminar"]', function () {
             var tr = tablaCliente.cell($(this).closest('td, li')).index();
             var data = tablaCliente.row(tr.row).data();
-            var parameters = new FormData();
-            parameters.append('action', 'delete');
-            parameters.append('id', data.id);
-
+            var parametros = new FormData();
+            parametros.append('action', 'eliminar');
+            parametros.append('id', data.id);
+            submit_con_ajax(window.location.pathname,`¿Está seguro de eliminar el registro Nro ${data.id}?`,parametros, function () {
+                tablaCliente.ajax.reload();
+                alerta('Registro eliminado');
+            });
         });
 
 
-    //Creación de Empleado
+    //Creación/Edición de Empleado
     $('form').on('submit', function (e) {
         e.preventDefault();
         var parametros = new FormData(this);
-        //submit_con_ajax(parametros);
-        submit_con_ajax( parametros, function () {
+        submit_con_ajax(window.location.pathname,'¿Está seguro de realizar la siguiente acción?',parametros, function () {
             $('#modalEmpleado').modal('hide');
             $('form')[0].reset();
             tablaCliente.ajax.reload();
+
+            if(parametros.get('action') == 'crear'){
+                alerta('Registro creado');
+            }else{
+                alerta('Registro actualizado');
+            }
         });
     });
 });
 
+function alerta(contenido){
+    var Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 7000
+      });
+    Toast.fire({
+    icon: 'success',
+    title: contenido
+    })
+}
 
+//Función para enviar datos
+function submit_con_ajax(url, contenido, parametros, callback) {
+    $.confirm({
+        theme: 'material',
+        title: 'Notificación',
+        icon: 'fa fa-info',
+        content: contenido,
+        columnClass: 'small',
+        typeAnimated: true,
+        cancelButtonClass: 'btn-primary',
+        draggable: true,
+        dragWindowBorder: false,
+        buttons: {
+            info: {
+                text: "Si",
+                btnClass: 'btn-primary',
+                action: function () {
+                    $.ajax({
+                        url: url, //window.location.pathname
+                        type: 'POST',
+                        data: parametros,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                    }).done(function (data) {
+                        if (!data.hasOwnProperty('error')) {
+                            callback();
+                            return false;
+                        }
+                        alert(data.error);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
+                    }).always(function (data) {
 
-function submit_con_ajax(parametros){
-    $.ajax({
-        url: window.location.pathname,
-        type: 'POST',
-        data: parametros,
-        DataType: 'json'
-    }).done(function(data) { //Cuando todo salió en orden
-        console.log(data.error);
-        if (!data.hasOwnProperty('error')){ //Si el data no contiene error "!"
-            $('#modalEmpleado').modal('hide');
-            $('form')[0].reset();
-            tablaCliente.ajax.reload();
-        }else{
-            message_error(data.error);
+                    });
+                }
+            },
+            danger: {
+                text: "No",
+                btnClass: 'btn-red',
+                action: function () {
+
+                }
+            },
         }
-    }).fail(function(data){ //Cuando se recibe un error
-        alert('error');
-    }).always(function(data){ //Se ejecutara siempre
-        console.log('complete');
-    });
+    })
 }

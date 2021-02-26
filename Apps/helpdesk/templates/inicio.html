@@ -67,36 +67,39 @@
                     </div>
                     <div class="modal-body">
                         <input name="action" type="hidden" value="crear">
-                        <input name="id" id="id" type="hidden" value="0">
+                        <input name="id" id="id" type="hidden" value="0"> <!-- Este input nos sirve para editar -->
                         <div class="row">
                             <div class="col-4">
                                 <label for="">Nombres</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Ingrese los Nombres" autofocus>
+                                <input type="text" class="form-control" name="nombres"  placeholder="Ingrese los Nombres" autofocus required>
                             </div>
                             <div class="col-4">
                                 <label for="">Apellidos</label>
-                                <input type="text" class="form-control" id="apellidos" placeholder="Ingrese los Apellidos">
+                                <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los Apellidos" required>
                             </div>
                             <div class="col-4">
                                 <label for="">Identidad</label>
-                                <input type="text" class="form-control" id="identidad" placeholder="Ingrese la Identidad">
+                                <input type="text" class="form-control" name="identidad" placeholder="Ingrese la Identidad" required>
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col-4">
                                 <label for="">Fecha de Nacimiento</label>
-                                <input type="text" class="form-control" id="fecha_nacimiento" placeholder="Seleccione">
+                                <input type="date" class="form-control" name="fecha_nacimiento" placeholder="Seleccione" required>
                             </div>
                             <div class="col-4">
                                 <label for="">Género</label>
-                                <input type="text" class="form-control" id="genero" placeholder="Seleccione">
+                                <select class="form-control" name="genero" id="">
+                                    <option value="1">Masculino</option>
+                                    <option value="2">Femenino</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
                                 <label for="">Dirreción</label>
-                                <textarea name="direccion" class="form-control" id="direccion"  rows="2" placeholder="Ingrese la Dirección"></textarea>
+                                <textarea name="direccion" class="form-control" rows="2" placeholder="Ingrese la Dirección"></textarea>
                             </div> 
                         </div>
                     </div>
