@@ -1,0 +1,9 @@
+Config/settings.py
+*.pyc
+*.png
+*.jpg
+*.jpeg
+db.sqlite3
+Apps/helpdesk/__pycache__/*
+Apps/helpdesk/__pycache__/*
+Apps/helpdesk/migrations/__pycache__/*

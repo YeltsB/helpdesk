@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<!-- Datatable css-->
+<link rel="stylesheet" href="{% static 'datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'datatables-1.10.20/js/jquery.dataTables.js' %}">
+<!-- Datatables -->
+<script src="{% static 'datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+    <div class="card card-default">
+        <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-search"></i>
+            {{ title }}
+        </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table class="table" id='datatable'>
+                <thead>
+                    {% block columms %}
+                    {% endblock columms %}
+                </thead>
+                <tbody>
+                    {% block rows %}
+                    {% endblock rows %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class='card-footer'>
+            <a href="{{ create_url }}" class='btn btn-primary btn-flat'>
+                <i class='fas fa-plus'></i> Nuevo registro
+            </a>
+        </div>
+    </div>
+    <!-- /.card -->
+{% endblock content %}
+
+
+
