@@ -55,7 +55,16 @@
 {% endblock content %}
 
 {% block js %}
-
+    <style>
+    .error {
+        color:red;
+    }
+    .has-error > input {
+        border-color: red !important;
+    }
+  
+    
+    </style>
     <div class="modal fade hide" id="modalEmpleado" tabindex="-1" role="dialog">
         <form method="post" action="." enctype="multipart/form-data" id="formulario">
         {% csrf_token %}
@@ -82,14 +91,14 @@
                             </div>
                             <div class="col-4">
                                 <label for="">Identidad</label>
-                                <input type="text" class="form-control" name="identidad" placeholder="Ingrese la Identidad" >
+                                <input type="text" class="form-control" name="identidad" placeholder="Ingrese la Identidad">
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col-4">
                                 <label for="">Fecha de Nacimiento</label>
-                                <input type="date" class="form-control" name="fecha_nacimiento" placeholder="Seleccione" >
+                                <input type="date" id="fecha_nacimiento" class="form-control" name="fecha_nacimiento" placeholder="Seleccione" >
                             </div>
                             <div class="col-4">
                                 <label for="">Género</label>

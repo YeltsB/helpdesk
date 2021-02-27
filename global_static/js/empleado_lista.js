@@ -171,6 +171,7 @@ function submit_con_ajax(url, contenido, parametros, callback) {
 //Validacion de campos con Jquery validate
 $( document ).ready( function () {
     $( "#formulario" ).validate( {
+      
         rules: {
             nombres: "required",
             apellidos: "required",
@@ -184,18 +185,17 @@ $( document ).ready( function () {
             identidad: "Este campo es obligatorio",
             fecha_nacimiento: "Seleccione una fecha",
             genero: "Seleccione el género",
-           
         },
         errorElement: "em",
-        highlight: function ( element, errorClass, validClass ) {
-            $( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+        highlight: function(element) {
+            $(element).parent('.col-4').addClass('has-error');
         },
-        unhighlight: function (element, errorClass, validClass) {
-            $( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+        unhighlight: function(element) {
+            $(element).parent('.col-4').removeClass('has-error');
         },
         submitHandler: function(form) {//Si las validaciones estan correctas entra aqui a hacer el envio
             //Creación/Edición de Empleado
-            var parametros = new FormData(form);
+            var parametros = new FormData(form); //Obtenemos los datos del formulario
             submit_con_ajax(window.location.pathname,'¿Está seguro de realizar la siguiente acción?',parametros, function () {
                 $('#modalEmpleado').modal('hide');
                 $('form')[0].reset();
@@ -211,10 +211,17 @@ $( document ).ready( function () {
             //Fin creacion/edicion de Empleado
         }
     });
-    $('#cerrar').on('click', function () {
+    $('#cerrar').on('click', function () {//Limpiamos las clases error presente en el formulario
         $("#formulario").validate().resetForm();
     });
 
+    $('#fecha_nacimiento').on('close', function () {//Limpiamos las clases error presente en el formulario
+        $(this).focus();
+    });
 
-} );
+   
+ 
+
+});
+
 
