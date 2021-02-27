@@ -1,8 +1,7 @@
 from Apps.helpdesk.lib import *
 
 # Create your views here.
-
-
+@login_required
 def inicio (request):
     if request.method == 'POST':
         data = []
@@ -43,3 +42,26 @@ def inicio (request):
         return JsonResponse(data, safe=False)
     elif request.method == 'GET':
         return render(request, 'inicio.html',{'titulo':'Inicio','entidad':'Lista de Empleados'})
+
+def login(request):
+    if request.user.is_authenticated:
+        return redirect('Apps/helpdesk:inicio')
+
+    if request.method == 'POST':
+        username = request.POST['correo']
+        password = request.POST['contrasena']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request,user)
+            print(user);
+            return redirect('Apps/helpdesk:inicio')
+        else:
+            data = {'error':'Correo o contraseña inválidos'}
+            return render(request,'login.html',data)
+    elif request.method == 'GET':
+        return render(request, 'login.html')
+
+
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('Apps/helpdesk:login')

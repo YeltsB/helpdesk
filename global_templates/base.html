@@ -36,6 +36,8 @@
   <script src="{% static 'sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
   <!-- jquery-confirm-v3.3.4 -->
   <script src="{% static 'jquery-confirm-v3.3.4/js/jquery-confirm.js' %}"></script>
+  <!--funciones personalizadas  -->
+  
 
   {% block head %}{% endblock head %}
 </head>
@@ -92,12 +94,10 @@
       </li>
 
         <li class="nav-item">
-        <a class="nav-link" data-toggle="dropdown" href="#">
+        <a class="nav-link " href="#" id="logout">
           <i class="fas fa-door-open mr-2"></i>Cerrar sesión
         </a>
       </li>
-     
-
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -118,7 +118,7 @@
           <img src="{% static 'AdminLTE-3.1.0/dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Yeltsin Baquedano</a>
+          <a href="#" class="d-block">{{ request.user}}</a>
         </div>
       </div>
       <!-- Sidebar Menu -->
@@ -229,7 +229,37 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+<script>
+    $('#logout').on('click', function () {
+        $.confirm({
+          theme: 'material',
+          title: 'Notificación',
+          icon: 'fa fa-info',
+          content: '¿Cerrar la sesión?',
+          columnClass: 'small',
+          typeAnimated: true,
+          cancelButtonClass: 'btn-primary',
+          draggable: true,
+          dragWindowBorder: false,
+          buttons: {
+              info: {
+                  text: "Si",
+                  btnClass: 'btn-primary',
+                  action: function () {
+                    window.location.href = "{% url 'Apps/helpdesk:cerrar_sesion' %}";
+                  }
+              },
+              danger: {
+                  text: "No",
+                  btnClass: 'btn-red',
+                  action: function () {
 
+                  }
+              },
+          }
+      })
+    });
+</script>
 {% block js %}{% endblock js %}
 </body>
 </html>
