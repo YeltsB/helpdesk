@@ -60,12 +60,12 @@ $(function () {
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();//Focus para el primer input en la modal
     });
-    $('.btnRefrescar').on('click', function () {
-        tablaEmpleado.ajax.reload(); //Accion de actualizar registros
+    $('.btnRefrescar').on('click', function () {//Boton actualizar Accion de actualizar registros
+        tablaEmpleado.ajax.reload(); 
         alerta('Registros actualizados');
     });
 
-    $('.btnAdd').on('click', function () { //Creacion de un registro
+    $('.btnAdd').on('click', function () { //Ventana modal Creacion de un registro
         $('input[name="action"]').val('crear');
         modalTitulo.find('span').html('Creación de Empleado');
         modalTitulo.find('i').removeClass().addClass('fas fa-plus');
@@ -105,31 +105,8 @@ $(function () {
                 alerta('Registro eliminado');
             });
         });
-
-
-    //Creación/Edición de Empleado
-    $('form').on('submit', function (e) {
-        e.preventDefault();
-        var parametros = new FormData(this);
-        submit_con_ajax(window.location.pathname,'¿Está seguro de realizar la siguiente acción?',parametros, function () {
-            $('#modalEmpleado').modal('hide');
-            $('form')[0].reset();
-            tablaEmpleado.ajax.reload();
-
-            if(parametros.get('action') == 'crear'){
-                alerta('Registro creado');
-            }else{
-                alerta('Registro actualizado');
-            }
-        });
-   
-    });
- 
-   
-    
-
 });
-
+//Alerta para cuando se hace un registro, actualizacion o eliminacion
 function alerta(contenido){
     var Toast = Swal.mixin({
         toast: true,
@@ -143,7 +120,7 @@ function alerta(contenido){
     })
 }
 
-//Función para enviar datos
+//Función Ajax para enviar datos a django con jquery confirm
 function submit_con_ajax(url, contenido, parametros, callback) {
     $.confirm({
         theme: 'material',
@@ -191,6 +168,7 @@ function submit_con_ajax(url, contenido, parametros, callback) {
     })
 }
 
+//Validacion de campos con Jquery validate
 $( document ).ready( function () {
     $( "#formulario" ).validate( {
         rules: {
@@ -214,16 +192,29 @@ $( document ).ready( function () {
         },
         unhighlight: function (element, errorClass, validClass) {
             $( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
-        }
-    } );
+        },
+        submitHandler: function(form) {//Si las validaciones estan correctas entra aqui a hacer el envio
+            //Creación/Edición de Empleado
+            var parametros = new FormData(form);
+            submit_con_ajax(window.location.pathname,'¿Está seguro de realizar la siguiente acción?',parametros, function () {
+                $('#modalEmpleado').modal('hide');
+                $('form')[0].reset();
+                tablaEmpleado.ajax.reload();
 
-    $("#guardar").click(function() {
-        //$("form").validate().resetForm();
-        return false;
+                if(parametros.get('action') == 'crear'){
+                    alerta('Registro creado');
+                }else{
+                    alerta('Registro actualizado');
+                }
+            });
+            return false;
+            //Fin creacion/edicion de Empleado
+        }
+    });
+    $('#cerrar').on('click', function () {
+        $("#formulario").validate().resetForm();
     });
 
-    
 
-    
 } );
 
