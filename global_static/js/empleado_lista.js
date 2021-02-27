@@ -122,6 +122,7 @@ $(function () {
                 alerta('Registro actualizado');
             }
         });
+   
     });
  
    
@@ -189,4 +190,40 @@ function submit_con_ajax(url, contenido, parametros, callback) {
         }
     })
 }
+
+$( document ).ready( function () {
+    $( "#formulario" ).validate( {
+        rules: {
+            nombres: "required",
+            apellidos: "required",
+            identidad: "required",
+            fecha_nacimiento: "required",
+            genero: "required",
+        },
+        messages: {
+            nombres: "Este campo es obligatorio",
+            apellidos: "Este campo es obligatorio",
+            identidad: "Este campo es obligatorio",
+            fecha_nacimiento: "Seleccione una fecha",
+            genero: "Seleccione el género",
+           
+        },
+        errorElement: "em",
+        highlight: function ( element, errorClass, validClass ) {
+            $( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+        }
+    } );
+
+    $("#guardar").click(function() {
+        //$("form").validate().resetForm();
+        return false;
+    });
+
+    
+
+    
+} );
 

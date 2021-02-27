@@ -3,7 +3,7 @@ from Apps.helpdesk.lib import *
 # Create your views here.
 @login_required
 def inicio (request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.is_ajax():
         data = []
         try:
             action = request.POST['action']
@@ -46,7 +46,6 @@ def inicio (request):
 def login(request):
     if request.user.is_authenticated:
         return redirect('Apps/helpdesk:inicio')
-
     if request.method == 'POST':
         username = request.POST['correo']
         password = request.POST['contrasena']
@@ -64,4 +63,8 @@ def login(request):
 
 def cerrar_sesion(request):
     logout(request)
+    return redirect('Apps/helpdesk:login')
+
+#Vista para el manejo de paginas no encontradas, renderiza a la vista principal que esta haga el trabajo
+def error_404_view(request, exception):
     return redirect('Apps/helpdesk:login')
