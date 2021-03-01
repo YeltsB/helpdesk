@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<!-- Datatable css-->
+<link rel="stylesheet" href="{% static 'datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'datatables-1.10.20/js/jquery.dataTables.js' %}">
+<!-- Datatables -->
+<script src="{% static 'datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+<!-- function personalizada-->
+
+{% endblock head %}
+{% block content %}
+
+    <div class="card card-default">
+        <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-search"></i>
+            {{ entidad }}
+        </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table class="table" id='datatable'>
+                <thead>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Nombres</th>
+                        <th>Usuario</th>
+                        <th>Úlitmo inicio</th>
+                        <th>Administrador</th>
+                        <th>Estado del usuario</th>
+                        <th>Opcciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in usuarios %}
+                    <tr>
+                        <td>{{ user.id}}</td>
+                        <td>{{ user.username}}</td>
+                        <td>{{ user.username}}</td>
+                        <td>{{ user.last_login}}</td>
+                        {% if user.is_superuser %}
+                            <td><span class="badge badge-success">Sí</span></td>
+                        {% else %}
+                            <td><span class="badge badge-danger">No</span></td>
+                        {% endif %}
+                        {% if user.is_active %}
+                            <td><span class="badge badge-success">Activo</span></td>
+                        {% else %}
+                            <td><span class="badge badge-danger">Inactivo</span></td>
+                        {% endif %}
+                        <td>
+                        <a rel="editar" class="btn btn-warning btn-sm btn-flat">
+                            <i class="fas fa-edit"></i></a> 
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class='card-footer'>
+        </div>
+    </div>
+<script>
+    $(document).ready(function(){
+        $('#datatable').DataTable( {
+            responsive: true,
+            autoWidth: false,
+        });
+
+        $('#datatable tbody').on('click','a[rel="editar"]',function (){
+            var tr = $('#datatable').DataTable().cell($(this).closest('td, li')).index();
+            var data = $('#datatable').DataTable().row(tr.row).data();
+        
+            $('.modal-title').find('span').html(`${1500}`);
+            $('#modalUsuario').modal('show');
+        });
+    });
+</script>
+{% endblock content %}
+{% block js %}
+       <div class="modal fade hide" id="modalUsuario" tabindex="-1" role="dialog">
+        <form method="post" action="." enctype="multipart/form-data" id="formulario">
+        {% csrf_token %}
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class='fas fa-edit'></i> <span></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                       
+                        <input name="action" type="hidden" value="crear">
+                        <input name="id" id="id" type="hidden" value="0"> <!-- Este input nos sirve para editar -->
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="">Nombres</label>
+                                <input type="text" class="form-control" name="nombres"  placeholder="Ingrese los Nombres" autofocus >
+                            </div>
+                            <div class="col-4">
+                                <label for="">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" placeholder="Ingrese los Apellidos" >
+                            </div>
+                            <div class="col-4">
+                                <label for="">Identidad</label>
+                                <input type="text" class="form-control" name="identidad" placeholder="Ingrese la Identidad">
+                            </div>
+                        </div>
+                        <br>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save" id="guardar"></i> Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="cerrar"><i class="fas fa-times"></i> Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock js %}
+
