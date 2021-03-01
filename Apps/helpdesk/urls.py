@@ -5,6 +5,8 @@ app_name = 'Apps/helpdesk' #El nombre de nuestra aplicacio
 urlpatterns = [
     path("", login, name="login"),
     path("inicio", inicio, name="inicio"),
-    path("cerrar/sesion", cerrar_sesion, name="cerrar_sesion")
+    path("cerrar/sesion", cerrar_sesion, name="cerrar_sesion"),
+    path("ususarios", usuario, name="usuario")
+
 
 ]

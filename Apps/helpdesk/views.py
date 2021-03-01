@@ -49,10 +49,9 @@ def login(request):
     if request.method == 'POST':
         username = request.POST['correo']
         password = request.POST['contrasena']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(username=username, password=password)
         if user is not None:
             auth_login(request,user)
-            print(user);
             return redirect('Apps/helpdesk:inicio')
         else:
             data = {'error':'Correo o contraseña inválidos'}
@@ -68,3 +67,11 @@ def cerrar_sesion(request):
 #Vista para el manejo de paginas no encontradas, renderiza a la vista principal que esta haga el trabajo
 def error_404_view(request, exception):
     return redirect('Apps/helpdesk:login')
+
+def usuario(request):
+    usuarios = User.objects.all()
+    data = {'titulo':'Usuarios',
+            'entidad':'Lista de usuarios',
+            'usuarios':usuarios}
+
+    return render(request, 'usuarios.html',data)

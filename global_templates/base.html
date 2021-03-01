@@ -57,7 +57,7 @@
         <a href="index3.html" class="nav-link">Inicio</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Contacto</a>
       </li>
     </ul>
     <!-- Right navbar links -->
@@ -128,30 +128,38 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-         <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-alt"></i>
-              <p>
-                Empleados
-              </p>
-            </a>
-          </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cash-register"></i>
+              <i class="nav-icon fas fa-user-friends"></i>
               <p>
-                Facturación
+                Personal
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Facturar</p>
+                  <p>Empleados</p>
                 </a>
               </li>
             </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'Apps/helpdesk:usuario' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Usuarios</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                Categorías
+              </p>
+            </a>
           </li>
 
           <li class="nav-header">OTRA CATEGORÍA</li>
@@ -197,9 +205,17 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">  
               <li class="breadcrumb-item"><a href="{% url 'Apps/helpdesk:inicio' %}"><i class="fas fa-home"></i> Inicio</a></li>
-              <li class="breadcrumb-item active" ><a href="#"></a></li>
+              <li class="breadcrumb-item active" ><a href="#"><i class="fas fa-search"></i> {{ entidad }}</a></li>
             </ol>
           </div><!-- /.col -->
+          <div class="col-6">
+                <span class="float-right">
+                    <i>
+                        Último inicio de sesión 
+                        {{ request.user.last_login }}
+                    </i>
+                </span>      
+            </div>
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
